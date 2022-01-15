@@ -1,8 +1,12 @@
 
 go.property("target", hash(""))
-go.property("distance", 5)
+go.property("distance", 10)
+go.property("distance_min", 2)
+go.property("distance_max", 20)
 go.property("angle_x", 0)
 go.property("angle_y", 0)
+go.property("angle_min", -1.5)
+go.property("angle_max", 0.5)
 go.property("collisions", false)
 
 local function set_camera(self)
@@ -57,7 +61,19 @@ function on_input(self, action_id, action)
 
 		self.angle_x = self.angle_x + action.dy * 0.01
 		self.angle_y = self.angle_y - action.dx * 0.01
+
+		self.angle_x = math.min(self.angle_x, self.angle_max)
+		self.angle_x = math.max(self.angle_x, self.angle_min)
+		
 		set_camera(self)
 
+	end
+
+	if action_id == hash("wheel_down") then
+		self.distance = self.distance + 0.2
+		self.distance = math.min(self.distance, self.distance_max)
+	elseif action_id == hash("wheel_up") then
+		self.distance = self.distance - 0.2
+		self.distance = math.max(self.distance, self.distance_min)
 	end
 end
