@@ -7,14 +7,11 @@ go.property("angle_y", 0)
 local function set_camera(self)
 	self.center = self.target ~= hash("") and go.get_world_position(self.target) or vmath.vector3(0)
 
-	local ry = vmath.matrix4_rotation_y(self.angle_y)
-	local rx = vmath.matrix4_rotation_x(self.angle_x)
-	local t = vmath.matrix4_translation(vmath.vector3(0, 0, self.distance))
-	local p = ry * rx * t * vmath.vector4(0, 0, 0, 1)
-
-	local q = vmath.quat_rotation_y(self.angle_y) * vmath.quat_rotation_x(self.angle_x)
-	go.set_rotation(q)
-	go.set_position(self.center + vmath.vector3(p.x, p.y, p.z))
+	local rot = vmath.quat_rotation_y(self.angle_y) * vmath.quat_rotation_x(self.angle_x)
+	local pos = vmath.rotate(rot, vmath.vector3(0, 0, self.distance))
+	
+	go.set_rotation(rot)
+	go.set_position(self.center + pos)
 end
 	
 function init(self)
