@@ -66,14 +66,15 @@ function on_input(self, action_id, action)
 		self.angle_x = math.max(self.angle_x, self.angle_min)
 		
 		set_camera(self)
-
 	end
 
 	if action_id == hash("wheel_down") then
 		self.distance = self.distance + 0.2
 		self.distance = math.min(self.distance, self.distance_max)
+		set_camera(self)
 	elseif action_id == hash("wheel_up") then
 		self.distance = self.distance - 0.2
 		self.distance = math.max(self.distance, self.distance_min)
+		set_camera(self)
 	end
 end
