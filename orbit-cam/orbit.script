@@ -3,15 +3,24 @@ go.property("target", hash(""))
 go.property("distance", 5)
 go.property("angle_x", 0)
 go.property("angle_y", 0)
+go.property("collisions", false)
 
 local function set_camera(self)
 	self.center = self.target ~= hash("") and go.get_world_position(self.target) or vmath.vector3(0)
 
 	local rot = vmath.quat_rotation_y(self.angle_y) * vmath.quat_rotation_x(self.angle_x)
-	local pos = vmath.rotate(rot, vmath.vector3(0, 0, self.distance))
+	local pos = vmath.rotate(rot, vmath.vector3(0, 0, self.distance)) + self.center
 	
 	go.set_rotation(rot)
-	go.set_position(self.center + pos)
+
+	if self.collisions then
+		local result = physics.raycast(self.center, pos, {hash("default")})
+		if result then
+			pos = (pos - self.center) * result.fraction + self.center
+		end
+	end
+	
+	go.set_position(pos)
 end
 	
 function init(self)
