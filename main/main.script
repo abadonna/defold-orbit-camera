@@ -1,0 +1,7 @@
+function init(self)
+	go.animate("/cube", "position.x", go.PLAYBACK_LOOP_PINGPONG, -2, go.EASING_INOUTQUAD, 5)
+end
+
+function on_input(self, action_id, action)
+	
+end
